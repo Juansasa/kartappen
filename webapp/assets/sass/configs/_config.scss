@@ -1,0 +1,23 @@
+// Some SASS plugins require configurable variables to be defined before import, if thats the case define
+// them here. Otherwise they can be defined in the SASS main file
+
+
+
+// Breakpoint responsive defaults
+$breakpoints : (
+	'tablet' : em(640),
+	'desktop' : em(1200)
+);
+
+// Typesettings configuration
+ $font-sans: Oswald, 'Helvetica Neue', Helvetica, Arial !default;
+ $font-serif: 'Droid sans', serif;
+ $font-mono: 'Lucida Console', Monaco, monospace;
+ $text-color: #000;
+ $base-vertical-unit: 6px;
+ $base-line-multi: 4;
+ $base-font-size: 16px;
+ $ms-ratio: 1.414;
+ $paragraph-indent: true;
+ $paragraph-justify: true;
+ $load-typesetted: true;

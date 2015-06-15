@@ -1,0 +1,19 @@
+.container {
+    @include container(12);
+    background-color: beige;
+    padding: 5%;
+
+    map {
+        @include span(10 of 12 last);
+        height: 35em;
+        position: relative;
+    }
+
+    #searchBox {
+        width: 100%;
+    }
+
+    aside {
+        @include span(2 of 12);
+    }
+}

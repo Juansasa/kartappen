@@ -1,0 +1,46 @@
+@mixin fillColumn($bgcolor, $spanwidth, $spanLeftOffset) {
+    &:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: $spanLeftOffset;
+        width: span($spanwidth);
+        background-color: $bgcolor;
+        height: 100%;
+        z-index: -1;
+    }
+}
+
+@mixin formalButton($bgcolor:white, $bordercolor:black) {
+    background-color: $bgcolor;
+    color: text-constrast($bgcolor);
+    border: solid 3px $bordercolor;
+    text-transform: uppercase;
+    font-family: Oswald, 'Helvetica Neue', Helvetica, Arial;
+    outline: none;
+    &:hover {
+        border: solid 3px $theme-red;
+    }
+
+    &:active {
+        border: solid 3px $bordercolor;
+    }
+}
+
+@mixin absoluteRotatedBox($color: black, $width:100%, $height: 100%) {
+    &:after {
+        content: '';
+        position: absolute;
+        width: $width;
+        height: $height;
+        top: 0;
+        left: 0;
+        border: solid thin $color;
+        transform: rotate(45deg);
+    }
+}
+
+@mixin backgroundAndColor($bgc) {
+    background-color: $bgc;
+    color: text-contrast($bgc, white);
+}

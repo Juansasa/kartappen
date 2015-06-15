@@ -1,0 +1,37 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Project-Id-Version: r2m\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Language: sv\n"
+"X-Generator: Poedit 1.7.4\n"
+
+#: components/about/about.routes.js:13
+msgid "About"
+msgstr ""
+
+#: shared/shared.config.js:25
+msgid "fmu-route-title/Fmu"
+msgstr ""
+
+#: shared/shared.config.js:13
+msgid "fmu-title/Fördjupad medicinsk utredning"
+msgstr ""
+
+#: shared/shared.config.js:14
+msgid "fmu-version/0.0.1"
+msgstr ""
+
+#: components/home/home.routes.js:13
+msgid "home"
+msgstr "Hem"
+
+#: components/about/about.html:4
+msgid "Quang Vu"
+msgstr "Jonas Bromö"

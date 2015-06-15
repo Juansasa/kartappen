@@ -1,0 +1,59 @@
+<div class="search">
+    <aside>
+        <form class="search-bar" role="search">
+            <input id="userLocationInput" type="search" placeholder="Sök position" ng-click="clearInput()" places-auto-complete types="['geocode']" />
+            <button type="button" ng-click="getGeoLocation()">
+                <i class="fa" ng-class="isLoadingUserPosition ? 'fa-spinner fa-spin' : 'fa-location-arrow'"></i>
+            </button>
+            <button type="submit" ng-click="searchPosition()">
+                <i class="fa fa-search"></i>
+            </button>
+        </form>
+        <table class="table-minimal">
+            <tbody>
+                <tr ng-repeat="office in offices">
+                    <td>
+                        <p><b>{{office.name}}</b></p>
+                        <p>{{office.box}}</p>
+                        <p>{{office.postalNumber + ' ' + office.city}}</p>
+                        <p>{{office.street}}</p>
+                        <p>Tel: {{office.tel}}</p>
+                        <p>Fax: {{office.fax}}</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </aside>
+    <map>
+        <span us-spinner="{radius:7, width:3, length: 3}" spinner-key="mapLoadSpinner" spinner-start-active="true">
+		<marker
+			id="{{userPosition.id}}"
+			zIndex="100"
+			position="{{userPosition.coordinate}}">
+		</marker>
+
+		<marker 
+			ng-repeat="office in offices"
+			on-click="markerClicked(office)"
+			visible="true"
+			id="{{office.id}}"
+			icon="{{office.markerIcon}}"
+			geo-callback="markerInitialized(office)"
+			position="{{office.street + ', ' + office.postalNumber + ', ' +  office.city}}">
+		</marker>
+
+		<div class="map-footer">
+			<ul>
+				<li>
+					<input name="Omrade1" value="1" type="checkbox"> Område 1
+				</li>
+				<li>
+					<input name="Omrade2" value="2" type="checkbox"> Område 2
+				</li>
+				<li>
+					<input name="Omrade3" value="3" type="checkbox"> Område 3
+				</li>
+			</ul>
+		</div>
+		</map>
+	</div>

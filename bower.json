@@ -1,0 +1,41 @@
+{
+  "name": "fmu-client",
+  "version": "0.0.1",
+  "dependencies": {
+    "json3": "~3.3.1",
+    "es5-shim": "~3.1.0",
+    "angular-cookies": "~1.2.0",
+    "angular-sanitize": "~1.2.0",
+    "angular-animate": "~1.2.0",
+    "angular-touch": "~1.2.0",
+    "angular-mocks": "~1.2.0",
+    "angular-bootstrap": "~0.12.0",
+    "animate.css": "~3.2.0",
+    "lodash": "~3.1.0",
+    "angular-gettext": "~2.0.2",
+    "angular-ui-router": "~0.2.13",
+    "angular-resource": "~1.3.12",
+    "angular": "~1.3.14",
+    "normalize.css": "~3.0.2",
+    "jquery.stellar": "~0.6.2",
+    "typesettings": "~2.3.3",
+    "angularjs-geolocation": "~0.1.1",
+    "angular-spinner": "~0.6.1",
+    "ngmap": "~1.7.10",
+    "PapaParse": "https://github.com/mholt/PapaParse",
+    "fuse.js": "~1.2.2",
+    "papaparse": "https://github.com/mholt/PapaParse.git#~4.1.1"
+  },
+  "devDependencies": {
+    "susy": "~2.2.2",
+    "breakpoint-sass": "~2.5.0",
+    "bootstrap-sass": "~3.3.3",
+    "typesettings": "~2.3.3"
+  },
+  "appPath": "./webapp",
+  "resolutions": {
+    "angular": "~1.3.14",
+    "lodash": "~3.1.0",
+    "webcomponentsjs": "^0.6.0"
+  }
+}

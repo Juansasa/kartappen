@@ -1,0 +1,154 @@
+.search {
+    @include container(12 no-gutters);
+    $previa-red: #EB0000 !default;
+    $base-border-color: gainsboro !default;
+    margin: 5%;
+    aside {
+        @include span(3 of 12);
+        form.search-bar {
+            ///////////////////////////////////////////////////////////////////////////////////
+            $base-spacing: 1em;
+            $base-border-radius: 3px !default;
+            $base-line-height: 1.5em !default;
+            $dark-gray: #333 !default;
+            //////////////////////////////////////////////////////////////////////////////////
+            $search-bar-border-color: $base-border-color;
+            $search-bar-border: 1px solid $search-bar-border-color;
+            $search-bar-background: lighten($search-bar-border-color, 10%);
+            position: relative;
+            width: 100%;
+            span {
+                @include position(absolute, 0em 3em 0em null);
+            }
+            input[type=search] {
+                @include appearance(none);
+                @include box-sizing(border-box);
+                @include transition(border-color);
+                background-color: white;
+                border-radius: $base-border-radius;
+                border-radius: $base-border-radius;
+                border: 1px solid $base-border-color;
+                display: block;
+                font-size: 1em;
+                font-style: italic;
+                margin: 0;
+                padding: $base-spacing / 3 $base-spacing / 3;
+                position: relative;
+                width: 100%;
+            }
+            button[type=button] {
+                @include button(flat, white);
+                @include position(absolute, 0em 2em 0em null);
+                border-bottom-left-radius: 0;
+                border-top-left-radius: 0;
+                border-top: 1px solid $base-border-color;
+                border-bottom: 1px solid $base-border-color;
+                outline: none;
+                padding: 5px 10px;
+                &:active:not(:disabled),
+                &:focus:not(:disabled) {
+                    background-color: white;
+                }
+                i {
+                    color: black;
+                    &:active {
+                        color: $previa-red;
+                    }
+                }
+            }
+            button[type=submit] {
+                @include button(flat, $previa-red);
+                @include position(absolute, 0em 0em 0em null);
+                border-bottom-left-radius: 0;
+                border-top-left-radius: 0;
+                outline: none;
+                padding: 5px 10px;
+                img {
+                    height: 1em;
+                    opacity: 1;
+                }
+            }
+        }
+        .table-minimal {
+            $base-border-color: gainsboro !default;
+            $base-border-radius: 3px !default;
+            $base-background-color: white !default;
+            $base-line-height: 1em !default;
+            //$base-spacing: 1em !default;
+            $action-color: #477DCA !default;
+            $base-link-color: $action-color !default;
+            $dark-gray: #333 !default;
+            $light-gray: #DDD !default;
+            $base-font-color: $dark-gray !default;
+            $table-border-color: $base-border-color;
+            $table-border: 1px solid $table-border-color;
+            $table-background: $base-background-color;
+            $table-header-background: lighten($table-background, 10);
+            $table-hover-background: darken($table-background, 2);
+            $table-stripe-background: darken($table-background, 4);
+            $table-stripe-background-hover: darken($table-stripe-background, 5);
+            $table-padding: 0.75em 1em;
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+            tbody {
+                tr:hover > td, tr:hover > th {
+                    background-color: $table-hover-background;
+                }
+                tr:first-child td {
+                    border-top: none;
+                }
+            }
+            thead {
+                th {
+                    background-color: $table-header-background;
+                    border-bottom: 0px;
+                    padding: $table-padding;
+                    text-align: left;
+                }
+            }
+            tbody {
+                background-color: $table-background;
+                p {
+                    display: block;
+                }
+                td {
+                    border: 1px solid $table-border-color;
+                    border-top: none;
+                    //line-height: $base-line-height;
+                    padding: $table-padding;
+                    button {
+                        @include button(flat, $action-color);
+                        display: inline-block;
+                        font-size: .7em;
+                        //line-height: $base-line-height;
+                        margin-bottom: .3em;
+                        margin-right: 0.5em;
+                        outline: none;
+                        padding: .3em 1em;
+                        width: 100%;
+                        @include respond-to('desktop') {
+                            margin-bottom: 0;
+                            width: auto;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    map {
+        @include span(9 of 12 last);
+        position: relative;
+        height: 35em;
+        .map-footer {
+            ul {
+                background-color: $previa-red;
+                li {
+                    display: inline-block;
+                    color: white;
+                    margin: 0.5em 1em;
+                }
+            }
+        }
+    }
+}
