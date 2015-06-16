@@ -98,7 +98,7 @@ module.exports = function() {
             bowerJson: require('./../bower.json'),
             directory: bowerDir,
             devDependencies: true,
-            exclude: [ /bootstrap-sass/, /bootstrap\.css/, /bootstrap\.css/, /foundation\.css/]
+            //exclude: [ /bootstrap-sass/, /bootstrap\.css/, /bootstrap\.css/, /foundation\.css/]
         }
     };
 

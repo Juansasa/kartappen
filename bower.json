@@ -16,26 +16,24 @@
     "angular-ui-router": "~0.2.13",
     "angular-resource": "~1.3.12",
     "angular": "~1.3.14",
-    "normalize.css": "~3.0.2",
     "jquery.stellar": "~0.6.2",
     "typesettings": "~2.3.3",
     "angularjs-geolocation": "~0.1.1",
     "angular-spinner": "~0.6.1",
     "ngmap": "~1.7.10",
-    "PapaParse": "https://github.com/mholt/PapaParse",
     "fuse.js": "~1.2.2",
+    "angular-formly": "~6.14.0",
+    "angular-formly-templates-bootstrap": "~4.3.2",
+    "bootstrap-sass-official": "~3.3.4",
     "papaparse": "https://github.com/mholt/PapaParse.git#~4.1.1"
   },
   "devDependencies": {
     "susy": "~2.2.2",
     "breakpoint-sass": "~2.5.0",
-    "bootstrap-sass": "~3.3.3",
     "typesettings": "~2.3.3"
   },
   "appPath": "./webapp",
   "resolutions": {
-    "angular": "~1.3.14",
-    "lodash": "~3.1.0",
-    "webcomponentsjs": "^0.6.0"
+    "angular": "^1.2.x"
   }
 }

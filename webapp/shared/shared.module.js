@@ -17,7 +17,8 @@
         'ngMap',
         'exception',
         'router',
-        'data'
+        'data',
+        'widgets'
     ]).run(['gettextCatalog',
         function(gettextCatalog) {
             $.stellar({

@@ -5,67 +5,43 @@
 
     /*@ngInject*/
     function mapJ($scope, geolocation, GeoCoder, usSpinnerService, MAP_IDS, locationService, offices, $sce) {
-        offices.all().then(
-            function(data) {
-                var officesJson = Papa.parse(data.data, {
-                    header: true,
-                    dynamicTyping: true
-                });
 
-                var fuzzySearch = new Fuse(officesJson.data, {
-                    keys: ['Resultatenhetnamn', 'Resultatenhet', 'Ort', 'Postnr', 'Distrikt'],
-                    shouldSort: true,
-                    includeScore: true,
-                    caseSensitive: false,
-                    id: false,
-                    threshold: 0.4,
-                });
-
-                function highlight(str, term) {
-                    if (!str) {
-                        return;
-                    }
-
-                    var highlightRegex = new RegExp('(' + term + ')', 'gi');
-                    return str.replace(highlightRegex,
-                        '<span class="highlight">$1</span>');
+        $scope.locationField = [{
+            type: 'location-search',
+            templateOptions: {
+                placeholder: 'Enter your location',
+                placeChanged: function(v) {
+                    console.log(v);
+                },
+                userLocationChanged: function(cords) {
+                    console.log(cords);
                 }
-
-                function fuzzySuggest(term) {
-                    if (!term) {
-                        return [];
-                    }
-
-                    return fuzzySearch
-                        .search(term)
-                        .slice(0, 10)
-                        .map(function(i) {
-                            var val = i.item;
-                            return {
-                                value: val,
-                                label: $sce.trustAsHtml(
-                                    '<div class="container-fluid">' +
-                                    '  <div class="pull-left">' +
-                                    highlight(val.Resultatenhetnamn, term) +
-                                    '  </div>' +
-                                    '  <div class="pull-right"> ' +
-                                    '   <span class="badge">' +
-                                    (Math.round(i.score * 100) / 100) +
-                                    '   </span>' +
-                                    ' </div>' +
-                                    '</div>')
-                            };
-                        });
-                }
-
-
-                $scope.officeList = officesJson.data;
-                $scope.acFuseOptions = {
-                    suggest: fuzzySuggest,
-                    'on_error': console.log
-                };
             }
-        );
+        }];
+
+        $scope.officeSearchField = [{
+            type: 'office-search'
+        }];
+
+        $scope.MOfilter = [{
+            className: 'horisontalCheckbox',
+            type: 'horizontalCheckbox',
+            templateOptions: {
+                options: [{
+                    name: 'Alla MO',
+                    value: 'alla'
+                }, {
+                    name: 'väst',
+                    value: 'väst'
+                }, {
+                    name: 'öst',
+                    value: 'öst'
+                }]
+            }
+        }];
+
+
+
 
 
 
@@ -103,11 +79,6 @@
         $scope.searchPosition = searchPosition;
         $scope.clearInput = clearInput;
 
-        // Initializations
-        locationService.getAllOffices().then(function(data) {
-            $scope.offices = data;
-        });
-
         $scope.$on('mapInitialized', function(event, map) {
             $scope.defaultBounds = new google.maps.LatLngBounds(
                 new google.maps.LatLng(59.3293235, 18.0685808));
@@ -117,6 +88,7 @@
             map.setOptions($scope.mapOptions);
 
             usSpinnerService.stop('mapLoadSpinner');
+            $scope.map = map;
         });
 
         function getUserLocation() {
