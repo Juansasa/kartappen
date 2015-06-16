@@ -7,8 +7,6 @@
      */
     angular.module('r2m', [
         'shared',
-
-        //'map',
         'your-position'
     ]);
 })();

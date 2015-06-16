@@ -2,7 +2,7 @@
     <input ng-model="model[options.key]" class="form-control" />
     <button><i class="fa" class="fa" ng-class="isSearching ? 'fa-spinner fa-spin' : 'fa-map-marker'"></i></button>
     <ul class="dropdown-menu" ng-show="status.isopen">
-        <li ng-repeat="match in searchResults">
+        <li class="list-item" ng-repeat="match in searchResults">
             <div ng-bind-html="match.label" ng-click="selected(match.value)">
             </div>
         </li>

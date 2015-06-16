@@ -1,7 +1,6 @@
-<div class="container-fluid">
+<div class="container">
     <br>
     <div class="row">
-        <div class="col-md-12">
             <div class="col-md-4">
                 <formly-form model="locationSearch" fields="locationField">
                     </form-form>
@@ -14,8 +13,8 @@
                 <formly-form model="moFilter" fields="MOfilter">
                     </form-form>
             </div>
-        </div>
-        <hr>
+    </div>
+    <div class="row">
         <div class="col-md-12">
             <map>
                 <marker id="{{userPosition.id}}" zIndex="100" position="{{userPosition.coordinate}}">

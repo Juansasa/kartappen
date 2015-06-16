@@ -4,7 +4,7 @@
         .controller('YourPositionController', mapJ);
 
     /*@ngInject*/
-    function mapJ($scope, geolocation, GeoCoder, usSpinnerService, MAP_IDS, locationService, offices, $sce) {
+    function mapJ($scope, geolocation, GeoCoder, usSpinnerService, MAP_IDS) {
 
         $scope.locationField = [{
             type: 'location-search',
