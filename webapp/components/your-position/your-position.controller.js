@@ -4,9 +4,9 @@
         .controller('YourPositionController', mapJ);
 
     /*@ngInject*/
-    function mapJ($scope, geolocation, massGeoCoder, usSpinnerService, offices, $filter, $localStorage) {
+    function mapJ($scope, geolocation, massGeoCoder, usSpinnerService, offices, $filter, logger) {
         offices.all().then(initOfficeData).then(initControls).then(populateOfficesOnMap);
-        
+
         function initOfficeData(response) {
             var officesJson = Papa.parse(response.data, {
                 header: true,
@@ -26,7 +26,8 @@
                         console.log(v);
                     },
                     userLocationChanged: function(cords) {
-                        console.log(cords);
+                        $scope.userPosition = [cords.latitude, cords.longitude];
+                        setBounds(cords.latitude, cords.longitude);
                     }
                 }
             }];
@@ -36,7 +37,9 @@
                 key: 'officeSearch',
                 templateOptions: {
                     options: officeList,
-
+                    selected: function(v) {
+                        console.log($scope);
+                    }
                 }
             }];
 
@@ -70,8 +73,8 @@
                 massGeoCoder.geocodeAddress(adress)
                 .then(function(result) {
                     office.coordinate = [result.lat, result.lng];
-                }, function(err, status) {
-                    console.log(err, status);
+                }, function(err) {
+                    logger.error(err.type, err.message);
                 });
             });
 
@@ -80,9 +83,6 @@
 
 
 
-        // Variables
-        $scope.isLoadingUserPosition = false;
-        $scope.getGeoLocation = getUserLocation;
         $scope.mapOptions = {
             zoom: 15,
             mapTypeControl: true,
@@ -102,8 +102,6 @@
             }
         };
 
-        // Functions
-        $scope.clearInput = clearInput;
 
         $scope.$on('mapInitialized', function(event, map) {
             $scope.defaultBounds = new google.maps.LatLngBounds(
@@ -129,11 +127,6 @@
                     var input = angular.element('#userLocationInput');
                     input.val('Nuvarande position');
                 });
-        }
-
-        function clearInput() {
-            var input = angular.element('#userLocationInput');
-            input.val('');
         }
 
         function setBounds(lat, long) {

@@ -5,7 +5,7 @@
         .run(register);
 
     /*@ngInject*/
-    function register(formlyConfig, geolocation) {
+    function register(formlyConfig, geolocation, massGeoCoder, logger) {
         formlyConfig.setWrapper([{
             name: 'horizontalBootstrapCheckbox',
             template: [
@@ -63,10 +63,19 @@
                 };
 
                 $scope.selected = function(value) {
-                    console.log(value);
-                    
-                    $scope.model[$scope.options.key] = value.FilialOrt + ', ' + value.FilialPostnr + ', Sweden';
+                    var adress = value.FilialAdress.trim() + ', ' + value.FilialPostnr + ', ' + value.FilialOrt.trim() + ', sweden';
+                    massGeoCoder.geocodeAddress(adress)
+                        .then(function(result) {
+                            $scope.model[$scope.options.key] = result.formattedAddress;
+                        }, function(err) {
+                            $scope.model[$scope.options.key] = 'Adress could not be found';
+                            logger.error(err.type, err.message);
+                        });
                     $scope.status.isopen = false;
+
+                    if($scope.to.selected) {
+                        $scope.to.selected(value);
+                    }
                 };
 
                 function highlight(str, term) {

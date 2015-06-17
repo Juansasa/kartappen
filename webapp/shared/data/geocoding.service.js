@@ -26,31 +26,31 @@
                     $localStorage.locations = JSON.stringify(locations);
 
                     queue.shift();
-                    task.d.resolve(parsedResult);
+                    task.deferObj.resolve(parsedResult);
 
                 } else if (status === google.maps.GeocoderStatus.ZERO_RESULTS) {
                     queue.shift();
-                    task.d.reject({
+                    task.deferObj.reject({
                         type: 'zero',
                         message: 'Zero results for geocoding address ' + task.address
                     });
                 } else if (status === google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
                     if (task.executedAfterPause) {
                         queue.shift();
-                        task.d.reject({
+                        task.deferObj.reject({
                             type: 'busy',
                             message: 'Geocoding server is busy can not process address ' + task.address
                         });
                     }
                 } else if (status === google.maps.GeocoderStatus.REQUEST_DENIED) {
                     queue.shift();
-                    task.d.reject({
+                    task.deferObj.reject({
                         type: 'denied',
                         message: 'Request denied for geocoding address ' + task.address
                     });
                 } else {
                     queue.shift();
-                    task.d.reject({
+                    task.deferObj.reject({
                         type: 'invalid',
                         message: 'Invalid request for geocoding: status=' + status + ', address=' + task.address
                     });
@@ -81,7 +81,7 @@
                 } else {
                     queue.push({
                         address: address,
-                        d: d
+                        deferObj: d
                     });
 
                     if (queue.length === 1) {

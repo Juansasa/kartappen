@@ -19,11 +19,24 @@
     <div class="row">
         <div class="col-md-12">
             <map>
-                <marker id="{{userPosition.id}}" zIndex="100" position="{{userPosition.coordinate}}">
-                </marker>
-
-                <marker ng-repeat="office in offices" on-click="markerClicked(office)" visible="true" id="{{office.id}}" icon="{{office.markerIcon}}" geo-callback="markerInitialized(office)" position="{{office.coordinate}}" ng-if="office.coordinate">
-                </marker>
+                <div ng-if="userPosition">
+                    <marker id="userLocation" zIndex="100" position="{{userPosition}}" on-click="showInfoWindow(event, 'info-userLocation')" animation="DROP"></marker>
+                    <info-window ng-repeat-end id="info-userLocation" visible-on-marker="userLocation" visible="true">
+                        <div ng-non-bindable>
+                            <b>Din position</b>
+                            <pre>{{userPosition | json}}</pre>
+                        </div>
+                    </info-window>
+                </div>
+                <div ng-if="office.coordinate" ng-repeat="office in offices">
+                    <marker id="{{'marker' + $index}}" on-click="showInfoWindow(event, 'info' + $index)" position="{{office.coordinate}}">
+                    </marker>
+                    <info-window id="{{'info' + $index}}" visible-on-marker="{{'marker' + $index}}" visible="{{true}}">
+                        <div ng-non-bindable>
+                            <pre>{{office | json}}</pre>
+                        </div>
+                    </info-window>
+                </div>
             </map>
         </div>
     </div>
