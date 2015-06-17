@@ -48,7 +48,7 @@
         }, {
             name: 'office-search',
             templateUrl: 'shared/widgets/office-search.html',
-            controller: /*@ngInject*/ function($scope, offices, $sce) {
+            controller: /*@ngInject*/ function($scope, $sce) {
                 $scope.status = {
                     isopen: false
                 };
@@ -64,6 +64,8 @@
 
                 $scope.selected = function(value) {
                     console.log(value);
+                    
+                    $scope.model[$scope.options.key] = value.FilialOrt + ', ' + value.FilialPostnr + ', Sweden';
                     $scope.status.isopen = false;
                 };
 

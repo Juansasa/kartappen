@@ -25,7 +25,9 @@
     "angular-formly-templates-bootstrap": "~4.3.2",
     "bootstrap-sass-official": "~3.3.4",
     "papaparse": "https://github.com/mholt/PapaParse.git#~4.1.1",
-    "angular-animate": "~1.4.1"
+    "angular-animate": "~1.4.1",
+    "ngStorage": "~0.3.0",
+    "ngstorage": "~0.3.5"
   },
   "devDependencies": {
     "susy": "~2.2.2",
@@ -34,6 +36,7 @@
   },
   "appPath": "./webapp",
   "resolutions": {
-    "angular": "1.4.1"
+    "angular": "1.4.1",
+    "angular-cookies": "~1.4.1"
   }
 }

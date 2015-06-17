@@ -4,12 +4,11 @@
         .controller('YourPositionController', mapJ);
 
     /*@ngInject*/
-    function mapJ($scope, geolocation, GeoCoder, usSpinnerService, MAP_IDS, offices, $filter) {
-        offices.all().then(initOfficeData).then(initControls);
-
-
-        function initOfficeData(data) {
-            var officesJson = Papa.parse(data.data, {
+    function mapJ($scope, geolocation, massGeoCoder, usSpinnerService, offices, $filter, $localStorage) {
+        offices.all().then(initOfficeData).then(initControls).then(populateOfficesOnMap);
+        
+        function initOfficeData(response) {
+            var officesJson = Papa.parse(response.data, {
                 header: true,
                 dynamicTyping: true
             });
@@ -17,7 +16,7 @@
             return $filter('valid')(officesJson.data);
         }
 
-        function initControls(data) {
+        function initControls(officeList) {
             $scope.locationField = [{
                 type: 'location-search',
                 key: 'locationSearch',
@@ -36,11 +35,12 @@
                 type: 'office-search',
                 key: 'officeSearch',
                 templateOptions: {
-                    options: data
+                    options: officeList,
+
                 }
             }];
 
-            $scope.model.MOFilter = $filter('MO')(data);
+            $scope.model.MOFilter = $filter('MO')(officeList);
             $scope.MOfilter = [{
                 className: 'horisontalCheckbox',
                 key: 'MOFilter',
@@ -58,16 +58,31 @@
                 }
             }];
 
-            return data;
+            return officeList;
         }
+
+        function populateOfficesOnMap(officeList) {
+            _.forEach(officeList, function(office) {
+                if (!office.FilialAdress) {
+                    return;
+                }
+                var adress = office.FilialAdress.trim() + ', ' + office.FilialPostnr + ', ' + office.FilialOrt.trim() + ', sweden';
+                massGeoCoder.geocodeAddress(adress)
+                .then(function(result) {
+                    office.coordinate = [result.lat, result.lng];
+                }, function(err, status) {
+                    console.log(err, status);
+                });
+            });
+
+            $scope.offices = officeList;
+        }
+
 
 
         // Variables
         $scope.isLoadingUserPosition = false;
         $scope.getGeoLocation = getUserLocation;
-        $scope.userPosition = {
-            id: MAP_IDS.USER_POSITION
-        };
         $scope.mapOptions = {
             zoom: 15,
             mapTypeControl: true,
@@ -88,7 +103,6 @@
         };
 
         // Functions
-        $scope.searchPosition = searchPosition;
         $scope.clearInput = clearInput;
 
         $scope.$on('mapInitialized', function(event, map) {
@@ -115,18 +129,6 @@
                     var input = angular.element('#userLocationInput');
                     input.val('Nuvarande position');
                 });
-        }
-
-        function searchPosition() {
-            usSpinnerService.spin('userGeoLocSpinner');
-            var input = angular.element('#userLocationInput');
-            GeoCoder.geocode({
-                address: input.val()
-            }).then(function(result) {
-                $scope.userPosition.coordinate = [result[0].geometry.location.lat(), result[0].geometry.location.lng()];
-                setBounds($scope.userPosition.coordinate[0], $scope.userPosition.coordinate[1]);
-                usSpinnerService.stop('mapLoadSpinner');
-            });
         }
 
         function clearInput() {

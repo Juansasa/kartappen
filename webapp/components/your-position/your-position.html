@@ -21,7 +21,8 @@
             <map>
                 <marker id="{{userPosition.id}}" zIndex="100" position="{{userPosition.coordinate}}">
                 </marker>
-                <marker ng-repeat="office in offices" on-click="markerClicked(office)" visible="true" id="{{office.id}}" icon="{{office.markerIcon}}" geo-callback="markerInitialized(office)" position="{{office.street + ', ' + office.postalNumber + ', ' +  office.city}}">
+
+                <marker ng-repeat="office in offices" on-click="markerClicked(office)" visible="true" id="{{office.id}}" icon="{{office.markerIcon}}" geo-callback="markerInitialized(office)" position="{{office.coordinate}}" ng-if="office.coordinate">
                 </marker>
             </map>
         </div>

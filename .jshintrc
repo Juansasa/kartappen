@@ -24,6 +24,7 @@
     "_": false,
     "$": false,
     "google": false,
-    "Papa": false
+    "Papa": false,
+    "Fuse": false
   }
 }
