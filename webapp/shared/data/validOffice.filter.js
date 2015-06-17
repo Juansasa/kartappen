@@ -7,11 +7,11 @@
     /*@ngInject*/
     function validOffices() {
         return function(input) {
-            return _.reject(input, hasFilial);
+            return _.filter(input, hasFilialAndValidMO);
         };
 
-        function hasFilial(item) {
-            return !item.Filial;
+        function hasFilialAndValidMO(item) {
+            return item.Filial && _.startsWith(item.Distrikt.trim().toLowerCase(), 'mo');
         }
     }
 })();

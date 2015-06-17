@@ -39,7 +39,12 @@
 .list-item {
 	border-bottom: solid thin darken(white, 10%);
 	padding: 0.5em 0;
+	cursor: pointer;
 	&:last-child {
 		border: none;
+	}
+
+	&:hover {
+		background-color: darken(white, 15%);
 	}
 }

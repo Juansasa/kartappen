@@ -49,16 +49,6 @@
             name: 'office-search',
             templateUrl: 'shared/widgets/office-search.html',
             controller: /*@ngInject*/ function($scope, offices, $sce) {
-                offices.all().then(
-                    function(data) {
-                        var officesJson = Papa.parse(data.data, {
-                            header: true,
-                            dynamicTyping: true
-                        });
-                        $scope.officeList = officesJson.data;
-                    }
-                );
-
                 $scope.status = {
                     isopen: false
                 };
@@ -92,7 +82,7 @@
                         return [];
                     }
 
-                    var fuzzySearch = new Fuse($scope.officeList, {
+                    var fuzzySearch = new Fuse($scope.to.options, {
                         keys: ['Filialnamn', 'FilialOrt', 'FilialPostnr', 'Distrikt'],
                         shouldSort: true,
                         includeScore: true,

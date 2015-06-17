@@ -23,6 +23,7 @@
     "angular": false,
     "_": false,
     "$": false,
-    "google": false
+    "google": false,
+    "Papa": false
   }
 }

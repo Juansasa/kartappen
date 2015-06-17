@@ -4,50 +4,62 @@
         .controller('YourPositionController', mapJ);
 
     /*@ngInject*/
-    function mapJ($scope, geolocation, GeoCoder, usSpinnerService, MAP_IDS) {
+    function mapJ($scope, geolocation, GeoCoder, usSpinnerService, MAP_IDS, offices, $filter) {
+        offices.all().then(initOfficeData).then(initControls);
 
-        $scope.locationField = [{
-            type: 'location-search',
-            templateOptions: {
-                placeholder: 'Enter your location',
-                placeChanged: function(v) {
-                    console.log(v);
-                },
-                userLocationChanged: function(cords) {
-                    console.log(cords);
+
+        function initOfficeData(data) {
+            var officesJson = Papa.parse(data.data, {
+                header: true,
+                dynamicTyping: true
+            });
+
+            return $filter('valid')(officesJson.data);
+        }
+
+        function initControls(data) {
+            $scope.locationField = [{
+                type: 'location-search',
+                key: 'locationSearch',
+                templateOptions: {
+                    placeholder: 'Enter your location',
+                    placeChanged: function(v) {
+                        console.log(v);
+                    },
+                    userLocationChanged: function(cords) {
+                        console.log(cords);
+                    }
                 }
-            }
-        }];
+            }];
 
-        $scope.officeSearchField = [{
-            type: 'office-search'
-        }];
+            $scope.officeSearchField = [{
+                type: 'office-search',
+                key: 'officeSearch',
+                templateOptions: {
+                    options: data
+                }
+            }];
 
-        $scope.MOfilter = [{
-            className: 'horisontalCheckbox',
-            type: 'horizontalCheckbox',
-            templateOptions: {
-                options: [{
-                    name: 'Alla MO',
-                    value: 'alla'
-                }, {
-                    name: 'väst',
-                    value: 'väst'
-                }, {
-                    name: 'öst',
-                    value: 'öst'
-                }]
-            }
-        }];
+            $scope.model.MOFilter = $filter('MO')(data);
+            $scope.MOfilter = [{
+                className: 'horisontalCheckbox',
+                key: 'MOFilter',
+                type: 'horizontalCheckbox',
+                templateOptions: {
+                    options: _.map($scope.model.MOFilter, function(item) {
+                        return {
+                            name: item,
+                            value: item
+                        };
+                    }),
+                    onBlur: function(v, o, s) {
+                        console.log(s);
+                    }
+                }
+            }];
 
-
-
-
-
-
-
-
-
+            return data;
+        }
 
 
         // Variables

@@ -4,11 +4,10 @@
   "dependencies": {
     "json3": "~3.3.1",
     "es5-shim": "~3.1.0",
-    "angular-cookies": "~1.2.0",
-    "angular-sanitize": "~1.2.0",
-    "angular-animate": "~1.2.0",
-    "angular-touch": "~1.2.0",
-    "angular-mocks": "~1.2.0",
+    "angular-cookies": "~1.4.1",
+    "angular-sanitize": "~1.4.1",
+    "angular-touch": "~1.4.1",
+    "angular-mocks": "~1.4.1",
     "angular-bootstrap": "~0.12.0",
     "animate.css": "~3.2.0",
     "lodash": "~3.1.0",
@@ -25,7 +24,8 @@
     "angular-formly": "~6.14.0",
     "angular-formly-templates-bootstrap": "~4.3.2",
     "bootstrap-sass-official": "~3.3.4",
-    "papaparse": "https://github.com/mholt/PapaParse.git#~4.1.1"
+    "papaparse": "https://github.com/mholt/PapaParse.git#~4.1.1",
+    "angular-animate": "~1.4.1"
   },
   "devDependencies": {
     "susy": "~2.2.2",
@@ -34,6 +34,6 @@
   },
   "appPath": "./webapp",
   "resolutions": {
-    "angular": "^1.2.x"
+    "angular": "1.4.1"
   }
 }
