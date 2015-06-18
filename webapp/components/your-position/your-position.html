@@ -19,12 +19,12 @@
     <div class="row">
         <div class="col-md-12">
             <map>
-                <div ng-if="office.geocodeAddress" ng-repeat="office in offices">
+                <div ng-if="office.geocodeAddress && !office.hide" ng-repeat="office in offices">
                     <marker id="{{office.geocodeAddress.formattedAddress}}" on-click="showOfficeInfo(office)" on-position_changed="setScope(event, this)" position="{{office.geocodeAddress.lat + ', ' + office.geocodeAddress.lng}}">
                     </marker>
                 </div>
 
-                <info-window id="officeInfo" on-position_changed="fitBounds()">
+                <info-window id="officeInfo">
                         <div ng-non-bindable>
                             <b>Kontorsinformation</b>
                             <div>
@@ -38,6 +38,7 @@
                             <div>
                             	<span><b>Ort: </b> {{office.FilialOrt}}</span>
                             </div>
+                            <button type="submit" ng-click="navigate()" class="btn btn-success btn-xs pull-right">Hitta hit</button>
                         </div>
                 </info-window>
             </map>

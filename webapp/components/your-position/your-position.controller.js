@@ -85,9 +85,15 @@
                             value: item
                         };
                     }),
-                    onBlur: function(v, o, s) {
-                        console.log(s.model);
-                    }
+                    onBlur: function(v) {
+                        _.forEach($scope.offices, function(office) {
+                            if(_.includes(v, office.Distrikt.trim())) {
+                                office.hide = false;
+                            } else {
+                                office.hide = true;
+                            }
+                        });
+                    }   
                 }
             }];
 
@@ -100,11 +106,12 @@
 
         $scope.showOfficeInfo = showOfficeInfo;
         $scope.fitBounds = fitBounds;
+        $scope.navigate = navigate;
 
         function showOfficeInfo(event, office) {
             var marker = getMarkerByID(office.geocodeAddress.formattedAddress);
             getInfoWindowByID('officeInfo').__open($scope.map, office.scope, marker);
-            fitBounds();
+            $scope.map.panTo(marker.getPosition());
         }
 
         function populateOfficesOnMap(officeList) {
@@ -162,19 +169,23 @@
                 $scope.userInfoWindow = new google.maps.InfoWindow({
                     content: contentString
                 });
-                google.maps.event.addListener($scope.userInfoWindow, 'position_changed', function() {
-                    fitBounds();
-                });
+                // google.maps.event.addListener($scope.userInfoWindow, 'position_changed', function() {
+                //     fitBounds();
+                // });
             }
             $scope.map.panTo(posLatLng);
-            $scope.userPositionMarker.setAnimation(google.maps.Animation.DROP);
+            $scope.userPositionMarker.setAnimation(google.maps.Animation.BOUNCE);
             $scope.userInfoWindow.open($scope.map, $scope.userPositionMarker);
+        }
+
+
+        function navigate() {
+            console.log('navigate');
         }
 
         function fitBounds() {
             var officeInfo = getInfoWindowByID('officeInfo');
             var userInfo = $scope.userInfoWindow;
-
             var officePos = officeInfo ? officeInfo.getPosition() : null;
             var userPos = userInfo ? userInfo.getPosition() : null;
 
