@@ -71,7 +71,7 @@
                         var position = new google.maps.LatLng(office.geocodeAddress.lat, office.geocodeAddress.lng);
                         var marker = getMarkerByID(office.geocodeAddress.formattedAddress);
                         $scope.map.panTo(position);
-                        office.scope.showInfoWindow(null, office.geocodeAddress.formattedAddress, marker);
+                        getInfoWindowByID('officeInfo').__open($scope.map, office.scope, marker);
                     }
                 }
             }];
@@ -102,9 +102,8 @@
         };
 
         $scope.showOfficeInfo = function(event, office) {
-            console.log(office.scope);
             var marker = getMarkerByID(office.geocodeAddress.formattedAddress);
-            office.scope.showInfoWindow(null, 'officeInfo', marker);
+            getInfoWindowByID('officeInfo').__open($scope.map, office.scope, marker);
         };
 
         function populateOfficesOnMap(officeList) {
