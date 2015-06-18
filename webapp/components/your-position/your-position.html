@@ -24,9 +24,20 @@
                     </marker>
                 </div>
 
-                <info-window id="officeInfo">
+                <info-window id="officeInfo" on-position_changed="fitBounds()">
                         <div ng-non-bindable>
-                            <pre>{{office | json}}</pre>
+                            <b>Kontorsinformation</b>
+                            <div>
+                            	<span><b>Adress: </b>{{office.FilialAdress}}</span>
+                            </div>
+                            <div>
+                            	<span>
+                            		<b>Postnummer: </b> {{office.FilialPostnr}}
+                            	</span>
+                            </div>
+                            <div>
+                            	<span><b>Ort: </b> {{office.FilialOrt}}</span>
+                            </div>
                         </div>
                 </info-window>
             </map>

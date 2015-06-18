@@ -68,10 +68,7 @@
                 templateOptions: {
                     options: officeList,
                     selected: function(office) {
-                        var position = new google.maps.LatLng(office.geocodeAddress.lat, office.geocodeAddress.lng);
-                        var marker = getMarkerByID(office.geocodeAddress.formattedAddress);
-                        $scope.map.panTo(position);
-                        getInfoWindowByID('officeInfo').__open($scope.map, office.scope, marker);
+                        showOfficeInfo(null, office);
                     }
                 }
             }];
@@ -101,10 +98,14 @@
             scope.office.scope = scope;
         };
 
-        $scope.showOfficeInfo = function(event, office) {
+        $scope.showOfficeInfo = showOfficeInfo;
+        $scope.fitBounds = fitBounds;
+
+        function showOfficeInfo(event, office) {
             var marker = getMarkerByID(office.geocodeAddress.formattedAddress);
             getInfoWindowByID('officeInfo').__open($scope.map, office.scope, marker);
-        };
+            fitBounds();
+        }
 
         function populateOfficesOnMap(officeList) {
             _.forEach(officeList, function(office) {
@@ -161,10 +162,26 @@
                 $scope.userInfoWindow = new google.maps.InfoWindow({
                     content: contentString
                 });
+                google.maps.event.addListener($scope.userInfoWindow, 'position_changed', function() {
+                    fitBounds();
+                });
             }
             $scope.map.panTo(posLatLng);
             $scope.userPositionMarker.setAnimation(google.maps.Animation.DROP);
             $scope.userInfoWindow.open($scope.map, $scope.userPositionMarker);
+        }
+
+        function fitBounds() {
+            var officeInfo = getInfoWindowByID('officeInfo');
+            var userInfo = $scope.userInfoWindow;
+
+            var officePos = officeInfo ? officeInfo.getPosition() : null;
+            var userPos = userInfo ? userInfo.getPosition() : null;
+
+            if(officePos && userPos) {
+                var bounds = new google.maps.LatLngBounds(officePos, userPos);
+                $scope.map.fitBounds(bounds);
+            }
         }
     }
 })();
