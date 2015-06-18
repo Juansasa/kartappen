@@ -31,17 +31,32 @@
             link: function(scope, el) {
                 scope.placeChanged = function() {
                     scope.model[scope.options.key] = el.find('input').val();
-                    if (scope.to.placeChanged) {
-                        scope.to.placeChanged(el.find('input').val());
+                    if (scope.to.placeChanged && el.find('input').val()) {
+                        massGeoCoder.geocodeAddress({
+                            address: el.find('input').val()
+                        }).then(function(response) {
+                            scope.to.placeChanged(response);
+                        }, function(err) {
+                            logger.error(err.type, err.message);
+                        });
                     }
                 };
 
                 scope.searchUserLocation = function() {
+                    el.find('input').val('');
                     scope.isSearching = true;
                     geolocation.getLocation()
                         .then(function(data) {
-                            scope.to.userLocationChanged(data.coords);
+                            //scope.to.userLocationChanged(new google.maps.LatLng(data.coords.latitude, data.coords.longitude));
                             scope.isSearching = false;
+                            massGeoCoder.geocodeAddress({
+                                latLng: new google.maps.LatLng(data.coords.latitude, data.coords.longitude)
+                            }).then(function(response) {
+                                el.find('input').val(response.formattedAddress);
+                                scope.to.userLocationChanged(response);
+                            }, function(err) {
+                                logger.error(err.type, err.message);
+                            });
                         });
                 };
             }
@@ -64,7 +79,9 @@
 
                 $scope.selected = function(value) {
                     var adress = value.FilialAdress.trim() + ', ' + value.FilialPostnr + ', ' + value.FilialOrt.trim() + ', sweden';
-                    massGeoCoder.geocodeAddress(adress)
+                    massGeoCoder.geocodeAddress({
+                        address: adress
+                    })
                         .then(function(result) {
                             $scope.model[$scope.options.key] = result.formattedAddress;
                         }, function(err) {
@@ -73,7 +90,7 @@
                         });
                     $scope.status.isopen = false;
 
-                    if($scope.to.selected) {
+                    if ($scope.to.selected) {
                         $scope.to.selected(value);
                     }
                 };

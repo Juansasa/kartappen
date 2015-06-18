@@ -7,12 +7,10 @@
 
         var TIME_OUT = 250;
         var executeNext = function() {
-            var task = queue[0],
-                geocoder = new google.maps.Geocoder();
+            var task = queue[0];
+            var geocoder = new google.maps.Geocoder();
 
-            geocoder.geocode({
-                address: task.address
-            }, function(result, status) {
+            geocoder.geocode(task.options, function(result, status) {
 
                 if (status === google.maps.GeocoderStatus.OK) {
 
@@ -21,7 +19,7 @@
                         lng: result[0].geometry.location.lng(),
                         formattedAddress: result[0].formatted_address
                     };
-                    locations[task.address] = parsedResult;
+                    locations[task.options.address] = parsedResult;
 
                     $localStorage.locations = JSON.stringify(locations);
 
@@ -32,27 +30,27 @@
                     queue.shift();
                     task.deferObj.reject({
                         type: 'zero',
-                        message: 'Zero results for geocoding address ' + task.address
+                        message: 'Zero results for geocoding address ' + task.options.address
                     });
                 } else if (status === google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
                     if (task.executedAfterPause) {
                         queue.shift();
                         task.deferObj.reject({
                             type: 'busy',
-                            message: 'Geocoding server is busy can not process address ' + task.address
+                            message: 'Geocoding server is busy can not process address ' + task.options.address
                         });
                     }
                 } else if (status === google.maps.GeocoderStatus.REQUEST_DENIED) {
                     queue.shift();
                     task.deferObj.reject({
                         type: 'denied',
-                        message: 'Request denied for geocoding address ' + task.address
+                        message: 'Request denied for geocoding address ' + task.options.address
                     });
                 } else {
                     queue.shift();
                     task.deferObj.reject({
                         type: 'invalid',
-                        message: 'Invalid request for geocoding: status=' + status + ', address=' + task.address
+                        message: 'Invalid request for geocoding: status=' + status + ', address=' + task.options.address
                     });
                 }
 
@@ -73,14 +71,13 @@
         };
 
         return {
-            geocodeAddress: function(address) {
-                var d = $q.defer();
-
-                if (_.has(locations, address)) {
-                    d.resolve(locations[address]);
+            geocodeAddress: function(options) {
+                var d = $q.defer();                
+                if (_.has(locations, options.address)) {
+                    d.resolve(locations[options.address]);
                 } else {
                     queue.push({
-                        address: address,
+                        options: options,
                         deferObj: d
                     });
 
