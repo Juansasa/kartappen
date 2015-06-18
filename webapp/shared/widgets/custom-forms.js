@@ -110,7 +110,9 @@
                         return [];
                     }
 
-                    var fuzzySearch = new Fuse($scope.to.options, {
+                    var fuzzySearch = new Fuse(_.reject($scope.to.options, function(office) {
+                        return office.hide;
+                    }), {
                         keys: ['Filialnamn', 'FilialOrt', 'FilialPostnr', 'Distrikt'],
                         shouldSort: true,
                         includeScore: true,
