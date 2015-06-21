@@ -25,6 +25,8 @@
             }
         };
 
+        $scope.travelMode = 'DRIVING';
+
         $scope.$on('mapInitialized', function(event, map) {
             var defaultlat = 59.3293235,
                 defaultLng = 18.0685808;
@@ -68,6 +70,7 @@
                 templateOptions: {
                     options: officeList,
                     selected: function(office) {
+                        $scope.selectedOffice = office;
                         showOfficeInfo(null, office);
                     }
                 }
@@ -149,6 +152,7 @@
         }
 
         function initUserLocation(newPosition) {
+            $scope.userPosition = newPosition;
             var posLatLng = new google.maps.LatLng(newPosition.lat, newPosition.lng);
             if ($scope.userPositionMarker) {
                 $scope.userPositionMarker.setPosition(posLatLng);

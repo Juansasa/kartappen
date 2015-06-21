@@ -41,7 +41,17 @@
                             <button type="submit" ng-click="navigate()" class="btn btn-success btn-xs pull-right">Hitta hit</button>
                         </div>
                 </info-window>
+
+                <directions 
+			      draggable="true"
+			      panel="directions-panel"
+			      travel-mode="{{travelMode}}"
+			      origin="{{userPosition.formattedAddress}}"
+			      destination="{{selectedOffice.geocodeAddress.formattedAddress}}">
+			    </directions>
             </map>
+
+            <div id="directions-panel"></div>
         </div>
     </div>
 </div>
