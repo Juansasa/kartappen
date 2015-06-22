@@ -8,10 +8,10 @@
 		height: $height;
 	}
 
-	button {
+	i {
 		position: absolute;
 		background-color: white;
-		height: $height - 2*$padding;
+		height: 1em;
 		right: 0.5em;
 		top: 0;
 		bottom: 0;

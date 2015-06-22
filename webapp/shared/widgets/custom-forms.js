@@ -28,12 +28,22 @@
         formlyConfig.setType([{
             name: 'location-search',
             templateUrl: 'shared/widgets/location-search.html',
+            wrapper: ['bootstrapHasError'],
+            defaultOptions: {
+                templateOptions: {
+                    required: true
+                }
+            },
             link: function(scope, el) {
                 scope.placeChanged = function() {
+                    if(!el.find('input').val()) {
+                        return;
+                    }
+                    
                     scope.model[scope.options.key] = el.find('input').val();
-                    if (scope.to.placeChanged && el.find('input').val()) {
+                    if (scope.to.placeChanged) {
                         massGeoCoder.geocodeAddress({
-                            address: el.find('input').val()
+                            address: scope.model[scope.options.key]
                         }).then(function(response) {
                             scope.to.placeChanged(response);
                         }, function(err) {
@@ -43,17 +53,16 @@
                 };
 
                 scope.searchUserLocation = function() {
-                    el.find('input').val('');
+                    scope.model[scope.options.key] = null;
                     scope.isSearching = true;
                     geolocation.getLocation()
                         .then(function(data) {
-                            //scope.to.userLocationChanged(new google.maps.LatLng(data.coords.latitude, data.coords.longitude));
                             scope.isSearching = false;
                             massGeoCoder.geocodeAddress({
                                 latLng: new google.maps.LatLng(data.coords.latitude, data.coords.longitude)
                             }).then(function(response) {
-                                el.find('input').val(response.formattedAddress);
                                 scope.to.userLocationChanged(response);
+                                scope.model[scope.options.key] = response.formattedAddress;
                             }, function(err) {
                                 logger.error(err.type, err.message);
                             });
@@ -63,6 +72,12 @@
         }, {
             name: 'office-search',
             templateUrl: 'shared/widgets/office-search.html',
+            wrapper: ['bootstrapHasError'],
+            defaultOptions: {
+                templateOptions: {
+                    required: true
+                }
+            },
             controller: /*@ngInject*/ function($scope, $sce) {
                 $scope.status = {
                     isopen: false
@@ -149,7 +164,63 @@
         }, {
             name: 'horizontalCheckbox',
             extends: 'multiCheckbox',
-            wrapper: ['bootstrapHasError']
+            wrapper: ['bootstrapHasError'],
+            controller: /* @ngInject */ function($scope) {
+                var to = $scope.to;
+                var opts = $scope.options;
+                $scope.multiCheckbox = {
+                    checked: [],
+                    change: setModel
+                };
+
+                $scope.$watchCollection('model', function() {
+                    // initialize the checkboxes check property
+                    var modelValue = $scope.model[opts.key];
+                    if (angular.isArray(modelValue)) {
+                        var valueProp = to.valueProp || 'value';
+                        angular.forEach(to.options, function(v, index) {
+                            $scope.multiCheckbox.checked[index] = modelValue.indexOf(v[valueProp]) !== -1;
+                        });
+                    }
+                });
+
+                function checkValidity(expressionValue) {
+                    var valid = angular.isArray($scope.model[opts.key]) &&
+                        $scope.model[opts.key].length > 0 &&
+                        expressionValue;
+
+                    $scope.fc.$setValidity('required', valid);
+                }
+
+                function setModel() {
+                    $scope.model[opts.key] = [];
+                    angular.forEach($scope.multiCheckbox.checked, function(checkbox, index) {
+                        if (checkbox) {
+                            $scope.model[opts.key].push(to.options[index][to.valueProp || 'value']);
+                        }
+                    });
+
+                    // Must make sure we mark as touched because only the last checkbox due to a bug in angular.
+                    $scope.fc.$setTouched();
+                    checkValidity(true);
+                }
+
+                if (opts.expressionProperties && opts.expressionProperties.required) {
+                    $scope.$watch($scope.options.expressionProperties.required, function(newValue) {
+                        checkValidity(newValue);
+                    });
+                }
+
+                if ($scope.to.required) {
+                    var unwatchFormControl = $scope.$watch('fc', function(newValue) {
+                        if (!newValue) {
+                            return;
+                        }
+                        checkValidity(true);
+                        unwatchFormControl;
+                    });
+                }
+            }
         }]);
     }
 })();

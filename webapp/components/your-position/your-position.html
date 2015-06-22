@@ -1,7 +1,7 @@
 <div class="container-fluid">
     <br>
-    <div class="row">
-        <form name="searchControl">
+    <form name="searchControl">
+        <div class="row search-control">
             <div class="col-md-4">
                 <formly-form model="model" fields="locationField">
                     </form-form>
@@ -14,44 +14,39 @@
                 <formly-form model="model" fields="MOfilter">
                     </form-form>
             </div>
-        </form>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <map>
-                <div ng-if="office.geocodeAddress && !office.hide" ng-repeat="office in offices">
-                    <marker id="{{office.geocodeAddress.formattedAddress}}" on-click="showOfficeInfo(office)" on-position_changed="setScope(event, this)" position="{{office.geocodeAddress.lat + ', ' + office.geocodeAddress.lng}}">
-                    </marker>
-                </div>
-
-                <info-window id="officeInfo">
+        </div>
+        <div class="row">
+            <div ng-class="isNavigating ? 'col-md-9': 'col-md-12'">
+                <map>
+                    <div ng-if="office.geocodeAddress && !office.hide" ng-repeat="office in offices">
+                        <marker id="{{office.geocodeAddress.formattedAddress}}" 
+                        	on-click="showOfficeInfo(office)" 
+                        	on-position_changed="setScope(event, this)" 
+                        	icon="'assets/images/icons/office-building.png'"
+                        	position="{{office.geocodeAddress.lat + ', ' + office.geocodeAddress.lng}}">
+                        </marker>
+                    </div>
+                    <info-window id="officeInfo">
                         <div ng-non-bindable>
                             <b>Kontorsinformation</b>
                             <div>
-                            	<span><b>Adress: </b>{{office.FilialAdress}}</span>
+                                <span><b>Adress: </b>{{office.FilialAdress}}</span>
                             </div>
                             <div>
-                            	<span>
+                                <span>
                             		<b>Postnummer: </b> {{office.FilialPostnr}}
                             	</span>
                             </div>
                             <div>
-                            	<span><b>Ort: </b> {{office.FilialOrt}}</span>
+                                <span><b>Ort: </b> {{office.FilialOrt}}</span>
                             </div>
-                            <button type="submit" ng-click="navigate()" class="btn btn-success btn-xs pull-right">Hitta hit</button>
+                            <button type="submit" ng-click="navigate(office)" class="btn btn-success btn-xs pull-right">Hitta hit</button>
                         </div>
-                </info-window>
-
-                <directions 
-			      draggable="true"
-			      panel="directions-panel"
-			      travel-mode="{{travelMode}}"
-			      origin="{{userPosition.formattedAddress}}"
-			      destination="{{selectedOffice.geocodeAddress.formattedAddress}}">
-			    </directions>
-            </map>
-
-            <div id="directions-panel"></div>
+                    </info-window>
+                </map>
+            </div>
+            <div ng-show="isNavigating" class="col-md-3 directions" id="directions-panel">
+            </div>
         </div>
-    </div>
+    </form>
 </div>

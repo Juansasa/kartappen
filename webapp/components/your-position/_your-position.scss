@@ -1,3 +1,44 @@
+$map-height: 45em;
+$previa-orange: #FC7820;
 map {
-	height: 45em;
+	height: $map-height;
+}
+
+.directions {
+	max-height: $map-height;
+	overflow: scroll;
+
+	table {
+		margin-top: 0;
+
+		tbody {
+			tr {
+				td {
+					padding: 0.2em;
+				}
+			}
+		}
+	}
+}
+
+.search-control {
+	background-color: $previa-orange;
+	padding: 1em 0 0.5em 0;
+	margin-bottom: 0.5em;
+
+	.form-group {
+		margin: 0;
+		padding: 0;
+		color: white;
+
+		.fa {
+			color: black;
+		}
+
+		.dropdown-menu {
+			color: black;
+		}
+	}
+
+
 }

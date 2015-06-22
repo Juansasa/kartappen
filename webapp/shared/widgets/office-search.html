@@ -1,6 +1,10 @@
 <div class="search-group" dropdown is-open="status.isopen">
     <input ng-model="model[options.key]" class="form-control" />
-    <button><i class="fa" class="fa" ng-class="isSearching ? 'fa-spinner fa-spin' : 'fa-map-marker'"></i></button>
+    <i class="fa" 
+    	ng-class="isSearching ? 'fa-spinner fa-spin' : 'fa-map-marker'" 
+    	ng-click="to.iconClicked()">
+    </i>
+    
     <ul class="dropdown-menu" ng-show="status.isopen">
         <li class="list-item" ng-repeat="match in searchResults">
             <div ng-bind-html="match.label" ng-click="selected(match.value)">

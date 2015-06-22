@@ -5,7 +5,6 @@
 
     /*@ngInject*/
     function mapJ($scope, geolocation, massGeoCoder, usSpinnerService, offices, $filter, logger) {
-        offices.all().then(initOfficeData).then(initControls).then(populateOfficesOnMap);
         $scope.mapOptions = {
             zoom: 15,
             mapTypeControl: true,
@@ -24,12 +23,24 @@
                 position: google.maps.ControlPosition.LEFT_TOP
             }
         };
-
+        $scope.setScope = setScope;
         $scope.travelMode = 'DRIVING';
+        $scope.showOfficeInfo = showOfficeInfo;
+        $scope.fitBounds = fitBounds;
+        $scope.navigate = navigate;
+
+        init();
 
         $scope.$on('mapInitialized', function(event, map) {
             var defaultlat = 59.3293235,
                 defaultLng = 18.0685808;
+            var directionServiceOptions = {
+                map: $scope.map,
+                panel: document.getElementById('directions-panel') || document.querySelector('directions-panel'),
+                suppressInfoWindows: true,
+                suppressMarkers: true
+            };
+
             $scope.defaultBounds = new google.maps.LatLngBounds(
                 new google.maps.LatLng(defaultlat, defaultLng));
             map.fitBounds($scope.defaultBounds);
@@ -37,8 +48,13 @@
             // Init map options
             map.setOptions($scope.mapOptions);
             $scope.map = map;
+            $scope.directionsService = new google.maps.DirectionsService();
+            $scope.directionRenderer = new google.maps.DirectionsRenderer(directionServiceOptions);
         });
 
+        function init() {
+            offices.all().then(initOfficeData).then(initControls).then(populateOfficesOnMap);
+        }
 
         function initOfficeData(response) {
             var officesJson = Papa.parse(response.data, {
@@ -72,6 +88,13 @@
                     selected: function(office) {
                         $scope.selectedOffice = office;
                         showOfficeInfo(null, office);
+                    },
+                    iconClicked: function() {
+                        if ($scope.selectedOffice) {
+                            var lat = $scope.selectedOffice.geocodeAddress.lat;
+                            var lng = $scope.selectedOffice.geocodeAddress.lng;
+                            $scope.map.panTo(new google.maps.LatLng(lat, lng));
+                        }
                     }
                 }
             }];
@@ -88,30 +111,21 @@
                             value: item
                         };
                     }),
-                    onBlur: function(v) {
-                        _.forEach($scope.offices, function(office) {
-                            if(_.includes(v, office.Distrikt.trim())) {
-                                office.hide = false;
-                            } else {
-                                office.hide = true;
-                            }
-                        });
-                    }   
+                    onBlur: function() {
+                        filterOfficesByMO();
+                    }
                 }
             }];
 
             return officeList;
         }
 
-        $scope.setScope = function(event, scope) {
+        function setScope(event, scope) {
             scope.office.scope = scope;
-        };
-
-        $scope.showOfficeInfo = showOfficeInfo;
-        $scope.fitBounds = fitBounds;
-        $scope.navigate = navigate;
+        }
 
         function showOfficeInfo(event, office) {
+            $scope.model.officeSearch = office.geocodeAddress.formattedAddress;
             var marker = getMarkerByID(office.geocodeAddress.formattedAddress);
             getInfoWindowByID('officeInfo').__open($scope.map, office.scope, marker);
             $scope.map.panTo(marker.getPosition());
@@ -152,18 +166,23 @@
         }
 
         function initUserLocation(newPosition) {
-            $scope.userPosition = newPosition;
             var posLatLng = new google.maps.LatLng(newPosition.lat, newPosition.lng);
-            if ($scope.userPositionMarker) {
-                $scope.userPositionMarker.setPosition(posLatLng);
+            $scope.isNavigating = false;
+            if ($scope.directionRenderer.getMap()) {
+                $scope.directionRenderer.setMap(null);
+            }
+
+            if ($scope.userMarker) {
+                $scope.userMarker.setPosition(posLatLng);
             } else {
-                $scope.userPositionMarker = new google.maps.Marker({
+                $scope.userMarker = new google.maps.Marker({
                     map: $scope.map,
                     draggable: true,
-                    position: posLatLng
+                    position: posLatLng,
+                    icon: 'https://www.google.com/mapfiles/marker_green.png'
                 });
-                google.maps.event.addListener($scope.userPositionMarker, 'click', function() {
-                    $scope.userInfoWindow.open($scope.map, $scope.userPositionMarker);
+                google.maps.event.addListener($scope.userMarker, 'click', function() {
+                    $scope.userInfoWindow.open($scope.map, $scope.userMarker);
                 });
 
                 var contentString = '<div>' +
@@ -173,18 +192,36 @@
                 $scope.userInfoWindow = new google.maps.InfoWindow({
                     content: contentString
                 });
-                // google.maps.event.addListener($scope.userInfoWindow, 'position_changed', function() {
-                //     fitBounds();
-                // });
             }
             $scope.map.panTo(posLatLng);
-            $scope.userPositionMarker.setAnimation(google.maps.Animation.BOUNCE);
-            $scope.userInfoWindow.open($scope.map, $scope.userPositionMarker);
+            $scope.userInfoWindow.open($scope.map, $scope.userMarker);
         }
 
 
-        function navigate() {
-            console.log('navigate');
+        function navigate(office) {
+            if (!$scope.model.locationSearch) {
+                return;
+            }
+
+            $scope.selectedOffice = $scope.selectedOffice || office;
+            $scope.isNavigating = true;
+            $scope.model.MOFilter = [];
+            filterOfficesByMO();
+            $scope.selectedOffice.hide = false;
+
+            var request = {
+                origin: $scope.model.locationSearch,
+                destination: $scope.selectedOffice.geocodeAddress.formattedAddress,
+                travelMode: google.maps.TravelMode.DRIVING
+            };
+
+            $scope.directionRenderer.setMap($scope.map);
+            $scope.directionsService.route(request, function(response, status) {
+                if (status === google.maps.DirectionsStatus.OK) {
+                    $scope.directionRenderer.setDirections(response);
+                }
+            });
+
         }
 
         function fitBounds() {
@@ -193,10 +230,20 @@
             var officePos = officeInfo ? officeInfo.getPosition() : null;
             var userPos = userInfo ? userInfo.getPosition() : null;
 
-            if(officePos && userPos) {
+            if (officePos && userPos) {
                 var bounds = new google.maps.LatLngBounds(officePos, userPos);
                 $scope.map.fitBounds(bounds);
             }
+        }
+
+        function filterOfficesByMO() {
+            _.forEach($scope.offices, function(office) {
+                if (_.includes($scope.model.MOFilter, office.Distrikt.trim()))  {
+                    office.hide = false;
+                } else if (office !== $scope.selectedOffice) {
+                    office.hide = true;
+                }
+            });
         }
     }
 })();
