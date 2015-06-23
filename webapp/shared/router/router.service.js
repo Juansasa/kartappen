@@ -74,7 +74,7 @@
         function updateTitle() {
             $rootScope.$on('$stateChangeSuccess',
                 function(event, toState) {
-                    var title = (toState.title || 'Fmu');
+                    var title = (toState.title || 'Previa');
                     $rootScope.title = title;
                 });
         }

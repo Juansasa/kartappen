@@ -68,6 +68,11 @@ module.exports = function() {
             files: [appPath + '/*.{ico,txt}', appPath + '/.htaccess']
         },
 
+        resources: {
+            files: [assets + '/resources/**'],
+            dest: dist + '/assets/resources'
+        },
+
         templatecache: {
             files: [
                 appPath + '/**/*.html',

@@ -37,7 +37,7 @@
                         queue.shift();
                         task.deferObj.reject({
                             type: 'busy',
-                            message: 'Geocoding server is busy can not process address ' + task.options.address
+                            message: 'Geocoding server was busy when try to process address ' + task.options.address
                         });
                     }
                 } else if (status === google.maps.GeocoderStatus.REQUEST_DENIED) {

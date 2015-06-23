@@ -5,8 +5,8 @@
      *
      * This is the entry point to the application
      */
-    angular.module('r2m', [
+    angular.module('previa-kontor', [
         'shared',
-        'your-position'
+        'office-search'
     ]);
 })();

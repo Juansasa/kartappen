@@ -77,6 +77,11 @@ gulp.task('fonts', function() {
         .pipe(gulp.dest(config.fonts.dest));
 });
 
+gulp.task('resources', function() {
+    return gulp.src(config.resources.files)
+        .pipe(gulp.dest(config.resources.dest));
+});
+
 gulp.task('misc', function() {
     return gulp.src(config.misc.files)
         .pipe(gulp.dest(config.dist));
@@ -86,4 +91,4 @@ gulp.task('clean', function(done) {
     $.del([config.dist, config.tmp], done);
 });
 
-gulp.task('build', ['html', 'images', 'fonts', 'misc']);
+gulp.task('build', ['html', 'images', 'fonts', 'misc', 'resources']);

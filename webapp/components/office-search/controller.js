@@ -1,12 +1,12 @@
 (function() {
     'use strict';
-    angular.module('your-position')
-        .controller('YourPositionController', mapJ);
+    angular.module('office-search')
+        .controller('OfficeSearchController', mapJ);
 
     /*@ngInject*/
-    function mapJ($scope, geolocation, massGeoCoder, usSpinnerService, offices, $filter, logger) {
+    function mapJ($scope, geolocation, massGeoCoder, offices, $filter, logger) {
         $scope.mapOptions = {
-            zoom: 15,
+            zoom: 5,
             mapTypeControl: true,
             mapTypeControlOptions: {
                 style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
@@ -28,32 +28,36 @@
         $scope.showOfficeInfo = showOfficeInfo;
         $scope.fitBounds = fitBounds;
         $scope.navigate = navigate;
+        $scope.toogleNavigationArea = toogleNavigationArea;
 
         init();
 
-        $scope.$on('mapInitialized', function(event, map) {
-            var defaultlat = 59.3293235,
-                defaultLng = 18.0685808;
-            var directionServiceOptions = {
-                map: $scope.map,
-                panel: document.getElementById('directions-panel') || document.querySelector('directions-panel'),
-                suppressInfoWindows: true,
-                suppressMarkers: true
-            };
-
-            $scope.defaultBounds = new google.maps.LatLngBounds(
-                new google.maps.LatLng(defaultlat, defaultLng));
-            map.fitBounds($scope.defaultBounds);
-
-            // Init map options
-            map.setOptions($scope.mapOptions);
-            $scope.map = map;
-            $scope.directionsService = new google.maps.DirectionsService();
-            $scope.directionRenderer = new google.maps.DirectionsRenderer(directionServiceOptions);
-        });
-
         function init() {
             offices.all().then(initOfficeData).then(initControls).then(populateOfficesOnMap);
+            $scope.$on('mapInitialized', function(event, map) {
+                var defaultlat = 59.3293235,
+                    defaultLng = 18.0685808;
+                var directionServiceOptions = {
+                    map: $scope.map,
+                    panel: document.getElementById('directions-panel') || document.querySelector('directions-panel'),
+                    suppressInfoWindows: true,
+                    suppressMarkers: true
+                };
+
+                $scope.defaultBounds = new google.maps.LatLngBounds(
+                    new google.maps.LatLng(defaultlat, defaultLng));
+                map.fitBounds($scope.defaultBounds);
+
+                // Init map options
+                map.setOptions($scope.mapOptions);
+                $scope.map = map;
+                $scope.directionsService = new google.maps.DirectionsService();
+                $scope.directionRenderer = new google.maps.DirectionsRenderer(directionServiceOptions);
+            });
+        }
+
+        function toogleNavigationArea() {
+            $scope.isNavigating = !$scope.isNavigating;
         }
 
         function initOfficeData(response) {
@@ -70,7 +74,7 @@
                 type: 'location-search',
                 key: 'locationSearch',
                 templateOptions: {
-                    placeholder: 'Enter your location',
+                    placeholder: 'Fyll i din position',
                     placeChanged: function(newPosition) {
                         initUserLocation(newPosition);
                     },
@@ -84,6 +88,7 @@
                 type: 'office-search',
                 key: 'officeSearch',
                 templateOptions: {
+                    placeholder: 'Fyll i adress, postnummer, ort',
                     options: officeList,
                     selected: function(office) {
                         $scope.selectedOffice = office;
@@ -142,7 +147,7 @@
                 }).then(function(result) {
                     office.geocodeAddress = result;
                 }, function(err) {
-                    logger.error(err.type, err.message);
+                    logger.warning(err.message, '[Error type: ' + err.type + ']');
                 });
             });
 

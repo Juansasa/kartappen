@@ -1,0 +1,66 @@
+$map-height: 45em;
+$previa-orange: #FC7820;
+
+map {
+    height: $map-height;
+}
+
+.directions {
+    display: block;
+    max-height: $map-height;
+    overflow: scroll;
+    table {
+        margin-top: 0;
+        tbody {
+            tr {
+                td {
+                    padding: 0.2em;
+                }
+            }
+        }
+    }
+}
+
+.menu-btn {
+    display: inline-block;
+    text-align: center;
+    height: 1em;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 1em;
+    margin: auto 0;
+    color: white;
+    &:hover {
+        color: black;
+    }
+    &:active {
+        color: black;
+    }
+    .ng-enter {
+        -webkit-animation: fadeInRight 0.5s;
+        animation: fadeInRight 0.5s;
+    }
+
+    .ng-leave {
+        -webkit-animation: fadeInRight 0.5s;
+        animation: fadeInRight 0.5s;
+    }
+}
+
+.search-control {
+    background-color: $previa-orange;
+    padding: 1em 0 0.5em 0;
+    margin-bottom: 0.5em;
+    .form-group {
+        margin: 0;
+        padding: 0;
+        color: white;
+        .fa {
+            color: black;
+        }
+        .dropdown-menu {
+            color: black;
+        }
+    }
+}

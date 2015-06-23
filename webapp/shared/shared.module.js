@@ -13,7 +13,6 @@
         'ngResource',
         'ui.bootstrap',
         'geolocation', 
-        'angularSpinner', 
         'ngMap',
         'exception',
         'router',
@@ -21,10 +20,6 @@
         'widgets'
     ]).run(['gettextCatalog',
         function(gettextCatalog) {
-            $.stellar({
-                horizontalScrolling: false,
-                responsive: true
-            });
             gettextCatalog.currentLanguage = 'sv';
             //gettextCatalog.debug = true;
         }

@@ -3,16 +3,14 @@
     <form name="searchControl">
         <div class="row search-control">
             <div class="col-md-4">
-                <formly-form model="model" fields="locationField">
-                    </form-form>
+                <formly-form model="model" fields="locationField"></form-form>
             </div>
             <div class="col-md-4">
-                <formly-form model="model" fields="officeSearchField">
-                    </form-form>
+                <formly-form model="model" fields="officeSearchField"></form-form>
             </div>
             <div class="col-md-4">
-                <formly-form model="model" fields="MOfilter">
-                    </form-form>
+                <formly-form model="model" fields="MOfilter"></form-form>
+                <span ng-click="toogleNavigationArea()" class="menu-btn pull-right fa fa-road fa-lg"></span>
             </div>
         </div>
         <div class="row">
@@ -45,7 +43,9 @@
                     </info-window>
                 </map>
             </div>
-            <div ng-show="isNavigating" class="col-md-3 directions" id="directions-panel">
+            <div ng-show="isNavigating" 
+            	class="col-md-3 directions"
+            	id="directions-panel">
             </div>
         </div>
     </form>
