@@ -1,50 +1,73 @@
 .search-group {
-	$height: 2.5em;
-	$padding: 0.2em;
-	position: relative;
-	height: $height;
-	input {
-		position: absolute;
-		height: $height;
-	}
+    $height: 2.5em;
+    $padding: 0.2em;
+    position: relative;
+    height: $height;
+    input {
+        position: absolute;
+        height: $height;
+    }
+    i {
+        position: absolute;
+        background-color: white;
+        height: 1em;
+        right: 0.5em;
+        top: 0;
+        bottom: 0;
+        margin: auto $padding;
+        outline-style: none;
+        border: none;
+        &:hover {
+            color: red;
+        }
+        &:active {
+            color: black;
+        }
+    }
+    label {
+        display: inline-block;
+    }
+}
 
-	i {
-		position: absolute;
-		background-color: white;
-		height: 1em;
-		right: 0.5em;
-		top: 0;
-		bottom: 0;
-		margin: auto $padding;
-		outline-style: none;
-		border: none;
+.no-gutter {
+    padding: 0;
+    margin: 0;
+}
 
-		&:hover {
-			color: red;
-		}
+.directions {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+}
 
-		&:active {
-			color: black;
-		}
-	}
+.list-group-item:first-child {
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+}
+
+.radio-group {
+    margin-top: 1em;
+}
+
+.form-group {
+    margin-bottom: 0 !important;
 }
 
 .horisontalCheckbox {
-	.checkbox {
-		display: inline-block;
-		margin-right: 1em;
-	}
+    .checkbox {
+        display: inline-block;
+        margin-right: 1em;
+    }
 }
 
 .list-item {
-	border-bottom: solid thin darken(white, 10%);
-	padding: 0.5em 0;
-	cursor: pointer;
-	&:last-child {
-		border: none;
-	}
-
-	&:hover {
-		background-color: darken(white, 15%);
-	}
+    border-bottom: solid thin darken(white, 10%);
+    padding: 0.5em 0;
+    cursor: pointer;
+    &:last-child {
+        border: none;
+    }
+    &:hover {
+        background-color: darken(white, 15%);
+    }
 }

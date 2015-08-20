@@ -1,50 +1,55 @@
 <div class="container-fluid">
     <form name="searchControl">
         <div class="row search-control">
-            <div class="col-md-4">
-                <formly-form model="model" fields="locationField"></form-form>
+            <div class="col-md-4" ng-show="showUserLocationInput || isNavigating">
+                <formly-form model="model" fields="locationField">
+                    </form-form>
             </div>
             <div class="col-md-4">
-                <formly-form model="model" fields="officeSearchField"></form-form>
+                <formly-form model="model" fields="officeSearchField">
+                    </form-form>
             </div>
-            <div class="col-md-4">
-                <formly-form model="model" fields="MOfilter"></form-form>
-                <span ng-click="toogleNavigationArea()" class="menu-btn pull-right fa fa-road fa-lg"></span>
+            <div ng-class="showUserLocationInput || isNavigating ? 'col-md-4 menu-controls' : 'col-md-8'">
+                <span ng-click="toogleOptions()" class="menu-btn pull-right fa fa-bars fa-lg"> <b>Meny</b></span>
+                <span ng-click="toogleNavigationArea()" class="menu-btn pull-right fa fa-road fa-lg"> <b>Navigering</b></span>
+            </div>
+            <div class="col-md-12" ng-show="showOptions">
+                <formly-form model="model" fields="MOfilter">
+                    </form-form>
             </div>
         </div>
         <div class="row">
-            <div ng-class="isNavigating ? 'col-md-9': 'col-md-12'">
-                <map>
-                    <div ng-if="office.geocodeAddress && !office.hide" ng-repeat="office in offices">
-                        <marker id="{{office.geocodeAddress.formattedAddress}}" 
-                        	on-click="showOfficeInfo(office)" 
-                        	on-position_changed="setScope(event, this)" 
-                        	icon="'assets/images/icons/office-building.png'"
-                        	position="{{office.geocodeAddress.lat + ', ' + office.geocodeAddress.lng}}">
-                        </marker>
-                    </div>
-                    <info-window id="officeInfo">
-                        <div ng-non-bindable>
-                            <b>Kontorsinformation</b>
-                            <div>
-                                <span><b>Adress: </b>{{office.FilialAdress}}</span>
-                            </div>
-                            <div>
-                                <span>
-                            		<b>Postnummer: </b> {{office.FilialPostnr}}
-                            	</span>
-                            </div>
-                            <div>
-                                <span><b>Ort: </b> {{office.FilialOrt}}</span>
-                            </div>
-                            <button type="submit" ng-click="navigate(office)" class="btn btn-success btn-xs pull-right">Hitta hit</button>
+            <map ng-class="isNavigating ? 'col-md-9 no-gutter': 'col-md-12'">
+                <div ng-if="office.geocodeAddress && !office.hide" ng-repeat="office in offices">
+                    <marker id="{{office.geocodeAddress.formattedAddress}}" on-click="showOfficeInfo(office)" on-position_changed="setScope(event, this)" icon="'assets/images/icons/office-building.png'" position="{{office.geocodeAddress.lat + ', ' + office.geocodeAddress.lng}}">
+                    </marker>
+                </div>
+                <info-window id="officeInfo" on-closeclick="closeInfoWindow()">
+                    <div ng-non-bindable>
+                        <b>Kontorsinformation</b>
+                        <div>
+                            <span><b>Adress: </b>{{office.FilialAdress}}</span>
                         </div>
-                    </info-window>
-                </map>
-            </div>
-            <div ng-show="isNavigating" 
-            	class="col-md-3 directions"
-            	id="directions-panel">
+                        <div>
+                            <span>
+                            <b>Postnummer: </b> {{office.FilialPostnr}}
+                        </span>
+                        </div>
+                        <div>
+                            <span><b>Ort: </b> {{office.FilialOrt}}</span>
+                        </div>
+                        <button type="submit" ng-click="navigate(office)" class="btn btn-success btn-xs pull-right">Hitta hit</button>
+                    </div>
+                </info-window>
+            </map>
+            <div class="col-md-3 no-gutter">
+                <div class="list-group" ng-show="isNavigating">
+                    <b class="list-group-item list-group-item-success"> 
+                        <i class="direction-button fa fa-times-circle fa-lg pull-right" ng-click="toogleNavigationArea()"></i>
+                            Vägsbeskrivning
+                    </b>
+                    <div class="list-group-item" id="directions-panel">Ingen information finns för tillfället</div>
+                </div>
             </div>
         </div>
     </form>
