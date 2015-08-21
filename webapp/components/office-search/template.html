@@ -19,7 +19,7 @@
             </div>
         </div>
         <div class="row">
-            <map ng-class="isNavigating ? 'col-md-9 no-gutter': 'col-md-12'">
+            <map ng-class="isNavigating ? 'col-md-9 no-gutter': 'col-md-12 no-gutter'">
                 <div ng-if="office.geocodeAddress && !office.hide" ng-repeat="office in offices">
                     <marker id="{{office.geocodeAddress.formattedAddress}}" on-click="showOfficeInfo(office)" on-position_changed="setScope(event, this)" icon="'assets/images/icons/office-building.png'" position="{{office.geocodeAddress.lat + ', ' + office.geocodeAddress.lng}}">
                     </marker>
@@ -44,10 +44,10 @@
             </map>
             <div class="col-md-3 no-gutter">
                 <div class="list-group" ng-show="isNavigating">
-                    <b class="list-group-item list-group-item-success"> 
+                    <h4 class="list-group-item list-group-item-success direction-list"> 
                         <i class="direction-button fa fa-times-circle fa-lg pull-right" ng-click="toogleNavigationArea()"></i>
                             Vägsbeskrivning
-                    </b>
+                    </h4>
                     <div class="list-group-item" id="directions-panel">Ingen information finns för tillfället</div>
                 </div>
             </div>

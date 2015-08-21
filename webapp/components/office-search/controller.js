@@ -12,6 +12,7 @@
 
         $scope.mapOptions = {
             zoom: 5,
+            scrollwheel: false,
             mapTypeControl: true,
             mapTypeControlOptions: {
                 style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
@@ -27,8 +28,8 @@
             streetViewControl: true,
             overviewMapControl: false
         };
+
         $scope.setScope = setScope;
-        $scope.travelMode = 'DRIVING';
         $scope.showOfficeInfo = showOfficeInfo;
         $scope.fitBounds = fitBounds;
         $scope.navigate = navigate;

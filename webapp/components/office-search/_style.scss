@@ -1,7 +1,14 @@
 $previa-orange: #FC7820;
 
 map {
-    height: 90vh;
+    height: 100vh;
+}
+
+.direction-list {
+    background-color: darken($previa-orange, 5%);
+    color: white;
+    margin-top: 0;
+    border-top: solid thin white;
 }
 
 .search-control {
@@ -19,6 +26,7 @@ map {
     .directions {
         display: block;
         overflow: scroll;
+        max-height: 100vh;
         table {
             margin-top: 0;
             tbody {
@@ -60,8 +68,8 @@ map {
 }
 
 .direction-button {
-    color: red;
+    color: white;
     &:hover {
-        color: black;
+        color: darken(white, 10%);
     }
 }
