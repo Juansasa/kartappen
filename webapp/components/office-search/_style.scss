@@ -11,9 +11,13 @@ map {
     border-top: solid thin white;
 }
 
+.border-top {
+    border-top: solid white thin;
+}
+
 .search-control {
     background-color: $previa-orange;
-    padding: 1em;
+    padding: 1em 1em 0 1em;
     .form-group {
         color: white;
         .fa {

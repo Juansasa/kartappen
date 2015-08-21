@@ -13,9 +13,10 @@
                 <span ng-click="toogleOptions()" class="menu-btn pull-right fa fa-bars fa-lg"> <b>Meny</b></span>
                 <span ng-click="toogleNavigationArea()" class="menu-btn pull-right fa fa-road fa-lg"> <b>Navigering</b></span>
             </div>
-            <div class="col-md-12" ng-show="showOptions">
+            <div class="col-md-12 border-top" ng-show="showOptions">
                 <formly-form model="model" fields="MOfilter">
                     </form-form>
+                <span ng-click="toogleOfficeList()" class="btn btn-sm btn-success">Extract data</span>
             </div>
         </div>
         <div class="row">
@@ -53,4 +54,6 @@
             </div>
         </div>
     </form>
+
+    <pre>{{officeList | json}}</pre>
 </div>

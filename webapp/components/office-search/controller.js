@@ -4,7 +4,7 @@
         .controller('OfficeSearchController', mapJ);
 
     /*@ngInject*/
-    function mapJ($scope, geolocation, massGeoCoder, offices, $filter, logger) {
+    function mapJ($scope, geolocation, massGeoCoder, offices, $filter, logger, $localStorage) {
 
         $scope.toogleOptions = function() {
             $scope.showOptions = !$scope.showOptions;
@@ -35,6 +35,7 @@
         $scope.navigate = navigate;
         $scope.toogleNavigationArea = toogleNavigationArea;
         $scope.closeInfoWindow = closeInfoWindow;
+        $scope.toogleOfficeList = toogleOfficeList;
 
         init();
 
@@ -304,6 +305,10 @@
                     office.hide = true;
                 }
             });
+        }
+
+        function toogleOfficeList () {
+            $scope.officeList = $scope.officeList ? null : JSON.parse($localStorage.locations);
         }
     }
 })();
