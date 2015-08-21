@@ -18,11 +18,11 @@
                 position: google.maps.ControlPosition.BOTTOM_CENTER
             },
             panControl: false,
-            // zoomControl: true,
-            // zoomControlOptions: {
-            //     style: google.maps.ZoomControlStyle.LARGE,
-            //     position: google.maps.ControlPosition.RIGHT_CENTER
-            // },
+            zoomControl: true,
+            zoomControlOptions: {
+                style: google.maps.ZoomControlStyle.LARGE,
+                position: google.maps.ControlPosition.RIGHT_CENTER
+            },
             scaleControl: false,
             streetViewControl: true,
             overviewMapControl: false
@@ -71,6 +71,12 @@
                 $scope.model.MOFilter = $filter('MO')($scope.offices);
                 filterOfficesByMO();
                 showUserMarker(false);
+
+                if ($scope.selectedOffice) {
+                    var marker = getMarkerByID($scope.selectedOffice.geocodeAddress.formattedAddress);
+                    getInfoWindowByID('officeInfo').__open($scope.map, $scope.selectedOffice.scope, marker);
+                    $scope.map.panTo(marker.getPosition());
+                }
             }
         }
 
@@ -160,6 +166,13 @@
         }
 
         function showOfficeInfo(event, office) {
+            if (!office || !office.geocodeAddress) {
+                throw {
+                    message: 'Something is wrong with the office data',
+                    office: office
+                };
+            }
+
             $scope.model.officeSearch = office.geocodeAddress.formattedAddress;
             var marker = getMarkerByID(office.geocodeAddress.formattedAddress);
             getInfoWindowByID('officeInfo').__open($scope.map, office.scope, marker);
@@ -267,7 +280,7 @@
         }
 
         function closeInfoWindow() {
-            $scope.showUserLocationInput = !$scope.showUserLocationInput;
+            $scope.showUserLocationInput = false;
         }
 
         function fitBounds() {
