@@ -40,8 +40,8 @@
         function init() {
             offices.all().then(initOfficeData).then(initControls).then(populateOfficesOnMap);
             $scope.$on('mapInitialized', function(event, map) {
-                var defaultlat = 59.3293235,
-                    defaultLng = 18.0685808;
+                var defaultlat = 62.5,
+                    defaultLng = 15;
                 var directionServiceOptions = {
                     map: $scope.map,
                     panel: document.getElementById('directions-panel') || document.querySelector('directions-panel'),
@@ -58,17 +58,13 @@
                 $scope.map = map;
                 $scope.directionsService = new google.maps.DirectionsService();
                 $scope.directionRenderer = new google.maps.DirectionsRenderer(directionServiceOptions);
-
-                // Hack to make map fullsize due to the api's limitation on height
-                $("map").css("height", $(window).height() + 'px');
-                google.maps.event.trigger(map, 'resize');
             });
         }
 
         function toogleNavigationArea() {
             $scope.isNavigating = !$scope.isNavigating;
 
-            if ($scope.isNavigating) {  
+            if ($scope.isNavigating) {
                 showUserMarker(true);
                 google.maps.event.trigger($scope.map, 'resize');
             } else {
@@ -79,7 +75,7 @@
         }
 
         function showUserMarker(show) {
-            if(!$scope.userMarker || !$scope.userInfoWindow) {
+            if (!$scope.userMarker || !$scope.userInfoWindow) {
                 return;
             }
 
@@ -206,48 +202,54 @@
         }
 
         function initUserLocation(newPosition) {
-            var posLatLng = new google.maps.LatLng(newPosition.lat, newPosition.lng);
-            $scope.isNavigating = false;
-            if ($scope.directionRenderer.getMap()) {
-                $scope.directionRenderer.setMap(null);
-            }
+            $scope.userPosition = new google.maps.LatLng(newPosition.lat, newPosition.lng);
+            var contentString = '<div>' +
+                '<b>Din position</b>' +
+                '<pre>' + newPosition.formattedAddress + '</pre>' +
+                '</div>';
 
             if ($scope.userMarker) {
-                $scope.userMarker.setPosition(posLatLng);
+                $scope.userMarker.setPosition($scope.userPosition);
+                $scope.userInfoWindow.close();
+                $scope.userInfoWindow = new google.maps.InfoWindow({
+                    content: contentString
+                });
             } else {
                 $scope.userMarker = new google.maps.Marker({
                     map: $scope.map,
                     draggable: true,
-                    position: posLatLng,
+                    position: $scope.userPosition,
                     icon: 'https://www.google.com/mapfiles/marker_green.png'
                 });
+
                 google.maps.event.addListener($scope.userMarker, 'click', function() {
                     $scope.userInfoWindow.open($scope.map, $scope.userMarker);
                 });
 
-                var contentString = '<div>' +
-                    '<b>Din position</b>' +
-                    '<pre>' + newPosition.formattedAddress + '</pre>' +
-                    '</div>';
                 $scope.userInfoWindow = new google.maps.InfoWindow({
                     content: contentString
                 });
             }
-            $scope.map.panTo(posLatLng);
+
+            $scope.map.panTo($scope.userPosition);
             $scope.userInfoWindow.open($scope.map, $scope.userMarker);
-            navigate(newPosition, $scope.selectedOffice);
+            navigate();
         }
 
 
-        function navigate(origin, office) {
-            $scope.showUserLocationInput = !$scope.showUserLocationInput;
-            $scope.selectedOffice = $scope.selectedOffice || office;
+        function navigate() {
+            $scope.showUserLocationInput = true;
+
+            if (!$scope.userPosition || !$scope.selectedOffice) {
+                return;
+            }
+
             $scope.model.MOFilter = [];
             filterOfficesByMO();
             $scope.selectedOffice.hide = false;
 
             var request = {
-                origin: new google.maps.LatLng(origin.lat, origin.lng),
+                origin: $scope.userPosition,
                 destination: $scope.selectedOffice.geocodeAddress.formattedAddress,
                 travelMode: google.maps.TravelMode.DRIVING
             };
@@ -257,9 +259,10 @@
                 if (status === google.maps.DirectionsStatus.OK) {
                     $scope.directionRenderer.setDirections(response);
                     $scope.isNavigating = true;
+                    $scope.$apply();
                 }
             });
-            
+
             showUserMarker(true);
         }
 
