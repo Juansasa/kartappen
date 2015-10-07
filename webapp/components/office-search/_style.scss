@@ -1,11 +1,11 @@
-$previa-orange: #FC7820;
+$previa-red: #EB0000;
 
 map {
     height: 100vh;
 }
 
 .direction-list {
-    background-color: darken($previa-orange, 5%);
+    background-color: darken($previa-red, 5%);
     color: white;
     margin-top: 0;
     border-top: solid thin white;
@@ -16,7 +16,7 @@ map {
 }
 
 .search-control {
-    background-color: $previa-orange;
+    background-color: $previa-red;
     padding: 1em 1em 0 1em;
     .form-group {
         color: white;

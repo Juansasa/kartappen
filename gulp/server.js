@@ -49,7 +49,7 @@ function browserSyncInit(baseDir, files, browser) {
         browserSync(options);
 }
 
-gulp.task('serve', ['watch'], function() {
+gulp.task('serve', ['watch', 'fonts-dev'], function() {
     browserSyncInit([
         config.serve,
         config.webapp

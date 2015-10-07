@@ -1,12 +1,12 @@
 <div class="search-group">
     <input ng-model="model[options.key]" 
-    	on-place_changed="placeChanged()" 
-    	class="form-control" 
-    	places-auto-complete types="['geocode']" 
-    	componentRestrictions="{country: 'SE'}"/>
-    	
-    	<i ng-click="searchUserLocation()" 
-    		class="fa" 
-    		ng-class="isSearching ? 'fa-spinner fa-spin' : 'fa-location-arrow'">
-    	</i>
+        on-place_changed="placeChanged()" 
+        class="form-control" 
+        places-auto-complete types="['geocode']" 
+        componentRestrictions="{country: 'SE'}"/>
+        
+        <i ng-click="searchUserLocation()" 
+            class="fa form-control-feedback" 
+            ng-class="isSearching ? 'fa-spinner fa-spin' : 'fa-location-arrow'">
+        </i>
 </div>

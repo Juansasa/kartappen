@@ -61,7 +61,8 @@ module.exports = function() {
 
         fonts: {
             files: [assets + '/fonts/**', bowerDir + '/**'],
-            dest: dist + '/fonts/'
+            dev: tmp + '/fonts',
+            dest: dist + '/fonts'
         },
 
         misc: {
