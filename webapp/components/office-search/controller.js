@@ -4,7 +4,7 @@
         .controller('OfficeSearchController', mapJ);
 
     /*@ngInject*/
-    function mapJ($scope, geolocation, massGeoCoder, offices, $filter, logger, $localStorage) {
+    function mapJ($scope, geolocation, massGeoCoder, offices, $filter, logger, $localStorage, $modal) {
 
         $scope.toogleOptions = function() {
             $scope.showOptions = !$scope.showOptions;
@@ -33,6 +33,7 @@
         $scope.showOfficeInfo = showOfficeInfo;
         $scope.fitBounds = fitBounds;
         $scope.navigate = navigate;
+        $scope.shareLocation = shareLocation;
         $scope.toogleNavigationArea = toogleNavigationArea;
         $scope.closeInfoWindow = closeInfoWindow;
         $scope.toogleOfficeList = toogleOfficeList;
@@ -281,6 +282,20 @@
             showUserMarker(true);
         }
 
+        function shareLocation(office) {
+            $modal.open({
+                animation: true,
+                size: 'sm',
+                templateUrl: 'shared/widgets/shareLocationModal.html',
+                resolve: {
+                    office: function() {
+                        return office;
+                    }
+                },
+                controller: 'ShareLocationModalController'
+            });
+        }
+
         function closeInfoWindow() {
             $scope.showUserLocationInput = false;
         }
@@ -307,7 +322,7 @@
             });
         }
 
-        function toogleOfficeList () {
+        function toogleOfficeList() {
             $scope.officeList = $scope.officeList ? null : JSON.parse($localStorage.locations);
         }
     }

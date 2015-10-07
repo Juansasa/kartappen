@@ -39,7 +39,21 @@
                         <div>
                             <span><b>Ort: </b> {{office.FilialOrt}}</span>
                         </div>
-                        <button type="submit" ng-click="navigate()" class="btn btn-success btn-xs pull-right">Hitta hit</button>
+                        <hr>
+                        <div class="btn-group pull-right text-center" role="group">
+                          <button type="submit" 
+                                ng-click="navigate()" 
+                                class="btn btn-success btn-sm">
+                                <i class="fa fa-car"></i>
+                                Hitta hit
+                            </button>
+                            <button type="button" 
+                                ng-click="shareLocation(office)"
+                                class="btn btn-success btn-sm">
+                                <i class="fa fa-share-square-o"></i>
+                                Dela
+                            </button>
+                        </div>
                     </div>
                 </info-window>
             </map>

@@ -1,0 +1,33 @@
+<form name="mailInputForm">
+    <div class="modal-header">
+        <h3 class="modal-title">Skicka till</h3>
+    </div>
+    <div class="modal-body has-feedback" ng-class="{'has-error': !mailInputForm.reciever.$valid}">
+        <alert ng-repeat="alert in alerts" 
+            dismiss-on-timeout="2000" 
+            close="closeAlert($index)" 
+            type="{{alert.type}}">{{alert.msg}}</alert>
+
+        <div class="form-group has-feedback">
+            <input
+                ng-model="inputEmail" 
+                type="email" 
+                name="reciever" 
+                id="mailReciever" 
+                class="form-control" 
+                placeholder="Fyll i mottagarens emailadress"
+                required="required">
+            <i class="fa form-control-feedback" 
+                ng-class="{'fa-spinner fa-spin' : isSending, 'fa-check text-success': sentSuccess, 'fa-exclamation-triangle text-danger': sentFailed}">
+            </i>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button ng-hide="mailSent" type="submit" class="btn btn-success" ng-click="send()">
+        	<i class="fa fa-envelope"> </i> Skicka
+        </button>
+        <button type="button" class="btn btn-danger" ng-click="close()">
+        	Avbryt
+        </button>
+    </div>
+</form>
