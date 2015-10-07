@@ -12,6 +12,7 @@
 
 		function closeAlert (index) {
 			$scope.alerts.splice(index, 1);
+			$modalInstance.close();
 		}
 
 		function closeModal () {
