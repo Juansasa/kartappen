@@ -14,7 +14,7 @@
 
         function send(reciever, office) {
             var directionUrl = 'http://google.com/maps/?daddr=' + office.geocodeAddress.lat + ',' + office.geocodeAddress.lng;
-            var displayMsg = 'Här är vägbeskrivningen till Previas konto ';
+            var displayMsg = 'Här är vägbeskrivningen till Previas kontor ';
 
             var emails = [{
                 fromAddress: 'kartappen@previa.se',
